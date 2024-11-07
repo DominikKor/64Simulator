@@ -10,7 +10,6 @@ class Stack {
         }
 
         this.items.push(element);
-        this.render();
 
         return false;
     }
@@ -21,7 +20,6 @@ class Stack {
             return;
         }
         this.items.pop();
-        this.render();
     }
 
     top() {
@@ -52,17 +50,42 @@ class Stack {
             container.style.backgroundColor = this.isColor(this.items[i]) ? this.items[i] : "grey";
             const label = document.createElement('span');
             label.textContent = this.items[i];
+
+            // Neue Zeilen zum Anpassen der Textfarbe
+            if (this.isColorLight(this.items[i])) {
+              label.style.color = 'black';
+            } else {
+              label.style.color = 'white';
+            }
             container.appendChild(label);
             stackContainer.appendChild(container);
         }
     }
-}
 
-// Initialisierung
-const stack = new Stack();
+    isColorLight(color) {
+        // Erstellen eines temporären Elements, um die RGB-Werte zu erhalten
+        const tempElem = document.createElement('div');
+        tempElem.style.color = color;
+        document.body.appendChild(tempElem);
+
+        // Extrahieren der RGB-Werte
+        const rgb = window.getComputedStyle(tempElem).color;
+        document.body.removeChild(tempElem);
+
+        const rgbValues = rgb.match(/\d+/g).map(Number);
+        // Berechnung der Helligkeit anhand der RGB-Werte
+        const brightness = Math.round(((parseInt(rgbValues[0]) * 299) +
+            (parseInt(rgbValues[1]) * 587) +
+            (parseInt(rgbValues[2]) * 114)) / 1000);
+        // Rückgabe true, wenn die Farbe hell ist
+        return brightness > 155;
+    }
+}
 
 // Parser-Funktion
 function parseCode(code) {
+    const stack = new Stack();
+
     const lines = code.split('\n');
     for (let line of lines) {
         line = line.trim();
@@ -80,6 +103,7 @@ function parseCode(code) {
             // Neue Stack-Instanz, optional falls mehrere Stacks unterstützt werden sollen
         }
     }
+    stack.render();
 }
 
 // Event-Listener für den "Code Ausführen"-Button
