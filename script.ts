@@ -1,26 +1,26 @@
 // source: https://stackoverflow.com/a/4515470
-function getLineHeight(el) {
-    var temp = document.createElement(el.nodeName), ret;
+function getLineHeight(el: HTMLElement) {
+    var temp = document.createElement(el.nodeName), ret: number;
     temp.setAttribute("style", "margin:0; padding:0; "
         + "font-family:" + (el.style.fontFamily || "inherit") + "; "
         + "font-size:" + (el.style.fontSize || "inherit"));
     temp.innerHTML = "A";
 
-    el.parentNode.appendChild(temp);
+    el.parentNode!.appendChild(temp);
     ret = temp.clientHeight;
-    temp.parentNode.removeChild(temp);
+    temp.parentNode!.removeChild(temp);
 
     return ret;
 }
 
 class Stack {
-    items: any[] = []
+    items: string[] = []
 
     constructor() {
         this.items = [];
     }
 
-    push(element: any) {
+    push(element: string) {
         if (this.items.length >= 6) {
             alert("Der Stack ist voll!")
             return true;
@@ -51,7 +51,7 @@ class Stack {
         return this.items.length === 0;
     }
 
-    isColor(strColor) {
+    isColor(strColor: string) {
         const s = new Option().style;
         s.color = strColor;
         return s.color !== '';
@@ -77,7 +77,7 @@ class Stack {
         }
     }
 
-    isColorLight(color) {
+    isColorLight(color: string) {
         // Erstellen eines temporären Elements, um die RGB-Werte zu erhalten
         const tempElem = document.createElement('div');
         tempElem.style.color = color;
@@ -203,6 +203,17 @@ function parseCode(codeline: string) {
         }
     }
     renderStacks();
+}
+
+function runNextLine() {
+    const code = codeInput.value;
+    const lines = code.split('\n');
+    const nextLine = activeLine + 1;
+    if (lines.length >= nextLine) {
+        activeLine = nextLine;
+        highlightActiveLine();
+        parseCode(lines[activeLine]);
+    }
 }
 
 codeInput.addEventListener('input', highlightActiveLine);
