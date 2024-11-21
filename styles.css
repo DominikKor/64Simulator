@@ -1,25 +1,165 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: aliceblue;
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Sama Devanagari", "Oswald", Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2 40%, #8ba8d2 80%);
 }
 
 h1, h2 {
-    text-align: center;
+    font-weight: bold;
+}
+
+#mode-title.stack {
+    color: rgb(22, 54, 111);
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.header {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.display-none {
+    display: none;
 }
 
 .container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
-.editor, .stack-display {
+.editor {
+    width: 50%;
+}
+
+#stack-display {
+    width: 40%;
+}
+
+#queue-display {
     width: 45%;
+}
+
+#stack-container {
+    width: 100%;
+    height: 300px;
+    border: 2px solid #333;
+    position: relative;
+    border-radius: 5px;
+}
+
+#queue-container {
+    width: 100%;
+    height: 150px;
+    border: 2px solid #333;
+    position: relative;
+    border-radius: 5px;
+}
+
+.stack-element {
+    border-radius: 6px;
+    width: calc(100% - 6px);
+    height: 50px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border: 2px solid #333;
+    margin: 3px;
+}
+
+.queue-element {
+    border-radius: 6px;
+    height: calc(100% - 6px);
+    width: 50px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border: 2px solid #333;
+    margin: 3px;
+}
+
+/*.queue-element:not(:last-child) {
+    border-right: 2px solid #333;
+}*/
+
+.stack-element span {
+    display: block;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.queue-element span {
+    display: block;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-weight: bold;
+}
+
+#toggle-mode-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#mode-title {
+    margin: 0.6rem 0 0 0;
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.mode-switcher {
+    --switcher-position: 5px;
+    --switcher-width: 43%;
+    background: #e0e0e0; /* Light gray background */
+    border-radius: 50px; /* Rounded edges for the switcher */
+    padding: 5px;
+    position: relative;
+    overflow: hidden;
+    width: 200px; /* Fixed width to manage the toggle */
+}
+
+.btn-mode {
+    flex: 1;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    color: #555;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    z-index: 1;
+    padding-top: 9px;
+}
+
+.btn-mode.active {
+    color: #fff;
+    z-index: 2;
+}
+
+.mode-switcher::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: var(--switcher-position, 5px); /* Default position */
+    width: var(--switcher-width, 43%); /* Half the width of the switcher */
+    height: calc(100% - 10px);
+    background: #333; /* Matches the active button */
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    z-index: 0;
 }
 
 #code-input {
     width: 100%;
     height: 200px;
+    font-family: monospace;
+    padding-top: 5px;
 }
 
 #run-code {
@@ -28,26 +168,22 @@ h1, h2 {
     padding: 10px;
 }
 
-#stack-container {
-    width: 100%;
-    height: 300px;
-    border: 2px solid #333;
-    position: relative;
+.read-only-line {
+    background-color: #f8f9fa; /* Match Bootstrap's light background */
+    border-bottom: 1px solid #ced4da; /* Visually separate the read-only line */
+    font-family: monospace; /* Match code styling */
+    color: #495057; /* Bootstrap default text color */
+    padding: 0.375rem 0.75rem; /* Match the padding of the textarea */
+    border-radius: 0.375rem 0.375rem 0 0;
+    pointer-events: none; /* Make it completely non-interactive */
 }
 
-.stack-element {
-    width: 100%;
-    height: 50px;
-    position: absolute;
-    left: 0;
-    bottom: 0;
+.code-textarea {
+    margin-top: -1px; /* Remove double borders */
+    border-top-left-radius: 0; /* No radius for shared top */
+    border-top-right-radius: 0;
 }
 
-.stack-element span {
-    display: block;
-    text-align: center;
-    line-height: 50px;
-    color: #fff;
-    font-weight: bold;
-    border-top: 2px solid #333;
+.form-floating > label::after {
+    background-color: transparent !important;
 }

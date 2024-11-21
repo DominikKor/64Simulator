@@ -1,113 +1,100 @@
-class Stack {
-    constructor() {
-        this.items = [];
-    }
+import Stack from './stack.js';
+import Queue from './queue.js';
 
-    push(element) {
-        if (this.items.length >= 6) {
-            alert("Der Stack ist voll!")
-            return true;
-        }
+let isStackMode = true;
 
-        this.items.push(element);
-
-        return false;
-    }
-
-    pop() {
-        if (this.isEmpty()) {
-            alert("Der Stack ist leer!");
-            return;
-        }
-        this.items.pop();
-    }
-
-    top() {
-        if (this.isEmpty()) {
-            alert("Der Stack ist leer!");
-            return;
-        }
-        alert("Top-Element: " + this.items[this.items.length - 1]);
-    }
-
-    isEmpty() {
-        return this.items.length === 0;
-    }
-
-    isColor(strColor) {
-        const s = new Option().style;
-        s.color = strColor;
-        return s.color !== '';
-    }
-
-    render() {
-        const stackContainer = document.getElementById('stack-container');
-        stackContainer.innerHTML = '';
-        for (let i = 0; i < this.items.length; i++) {
-            const container = document.createElement('div');
-            container.classList.add('stack-element');
-            container.style.bottom = `${i * 50}px`;
-            container.style.backgroundColor = this.isColor(this.items[i]) ? this.items[i] : "grey";
-            const label = document.createElement('span');
-            label.textContent = this.items[i];
-
-            // Neue Zeilen zum Anpassen der Textfarbe
-            if (this.isColorLight(this.items[i])) {
-              label.style.color = 'black';
-            } else {
-              label.style.color = 'white';
-            }
-            container.appendChild(label);
-            stackContainer.appendChild(container);
-        }
-    }
-
-    isColorLight(color) {
-        // Erstellen eines temporären Elements, um die RGB-Werte zu erhalten
-        const tempElem = document.createElement('div');
-        tempElem.style.color = color;
-        document.body.appendChild(tempElem);
-
-        // Extrahieren der RGB-Werte
-        const rgb = window.getComputedStyle(tempElem).color;
-        document.body.removeChild(tempElem);
-
-        const rgbValues = rgb.match(/\d+/g).map(Number);
-        // Berechnung der Helligkeit anhand der RGB-Werte
-        const brightness = Math.round(((parseInt(rgbValues[0]) * 299) +
-            (parseInt(rgbValues[1]) * 587) +
-            (parseInt(rgbValues[2]) * 114)) / 1000);
-        // Rückgabe true, wenn die Farbe hell ist
-        return brightness > 155;
-    }
-}
-
-// Parser-Funktion
-function parseCode(code) {
+async function parseCode(code) {
     const stack = new Stack();
+    const queue = new Queue();
+
+    (isStackMode ? stack : queue).render();
+    // wait .2 seconds
+    await new Promise(r => setTimeout(r, 100));
 
     const lines = code.split('\n');
     for (let line of lines) {
         line = line.trim();
-        if (line.startsWith('stack.push')) {
-            const color = line.match(/"([^"]+)"/)[1];
-            let stackIsFull = stack.push(color);
-            if (stackIsFull) { break; }
-        } else if (line.startsWith('stack.pop')) {
-            stack.pop();
-        } else if (line.startsWith('stack.top')) {
-            stack.top();
-        } else if (line.startsWith('stack.isEmpty')) {
-            alert(stack.isEmpty() ? "wahr" : "falsch")
-        } else if (line.startsWith('Stack stack = new Stack()')) {
-            // Neue Stack-Instanz, optional falls mehrere Stacks unterstützt werden sollen
+        if (isStackMode) {
+            // Stack Mode
+            if (line.startsWith('s.push')) {
+                const color = line.match(/"([^"]+)"/)[1];
+                let stackIsFull = stack.push(color);
+                if (stackIsFull) {
+                    break;
+                }
+            } else if (line.startsWith('s.pop')) {
+                stack.pop();
+            } else if (line.startsWith('s.top')) {
+                stack.top();
+            } else if (line.startsWith('s.isEmpty')) {
+                alert(stack.isEmpty() ? "wahr" : "falsch")
+            } else if (line.startsWith('Stack stack = new Stack()')) {
+                // New stack instance, do later
+            }
+            stack.render();
+        } else {
+            // Queue mode
+            if (line.startsWith('q.enqueue')) {
+                const color = line.match(/"([^"]+)"/)[1];
+                queue.enqueue(color);
+            } else if (line.startsWith('q.dequeue')) {
+                queue.dequeue();
+            } else if (line.startsWith('q.isEmpty')) {
+                alert(queue.isEmpty() ? "wahr" : "falsch");
+            } else if (line.startsWith('q.head')) {
+                queue.head();
+            }
+            queue.render();
         }
     }
-    stack.render();
 }
 
-// Event-Listener für den "Code Ausführen"-Button
-document.getElementById('run-code').addEventListener('click', () => {
-    const code = document.getElementById('code-input').value;
-    parseCode(code);
+document.addEventListener('DOMContentLoaded', () => {
+    const modeTitle = document.getElementById('mode-title');
+    const switcher = document.querySelector('.mode-switcher');
+    const stackDisplay = document.getElementById('stack-display');
+    const queueDisplay = document.getElementById('queue-display');
+    const readOnlyCodeLine = document.getElementById('read-only-code-line');
+
+    const stack = new Stack();
+    const queue = new Queue();
+
+    // event listener for "Run Code" button
+    document.getElementById('run-code').addEventListener('click', async () => {
+        const code = document.getElementById('code-input').value;
+        await parseCode(code);
+    });
+
+    // event listeners for mode switcher buttons
+    document.querySelectorAll('.btn-mode').forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove "active" class from all buttons
+            document.querySelectorAll('.btn-mode').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            if (button.dataset.mode === 'stack') {
+                switcher.style.setProperty('--switcher-position', '5px'); // Move to left
+                switcher.style.setProperty('--switcher-width', '43%');
+                isStackMode = true;
+
+                modeTitle.textContent = 'STACK24 – Hier stack ich alles.';
+                modeTitle.classList.add('stack')
+                readOnlyCodeLine.innerHTML = 'Stack&lt;String&gt; s = new Stack&lt;String&gt;();';
+                queueDisplay.classList.add('display-none');
+                stackDisplay.classList.remove('display-none');
+                stack.render();
+            } else {
+                switcher.style.setProperty('--switcher-position', '47%'); // Move to right
+                switcher.style.setProperty('--switcher-width', '50%');
+                isStackMode = false;
+
+                modeTitle.textContent = 'Queue24';
+                modeTitle.classList.remove('stack')
+                readOnlyCodeLine.innerHTML = 'Queue&lt;String&gt; q = new Queue&lt;String&gt;();';
+                stackDisplay.classList.add('display-none');
+                queueDisplay.classList.remove('display-none');
+                queue.render();
+            }
+        });
+    });
 });
