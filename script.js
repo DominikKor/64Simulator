@@ -2,14 +2,18 @@ import Stack from './stack.js';
 import Queue from './queue.js';
 
 let isStackMode = true;
+const stack = new Stack();
+const queue = new Queue();
 
-async function parseCode(code) {
-    const stack = new Stack();
-    const queue = new Queue();
+async function parseCode(code, doReset) {
+    if (doReset) {
+        stack.items = [];
+        queue.items = [];
 
-    (isStackMode ? stack : queue).render();
-    // wait .2 seconds
-    await new Promise(r => setTimeout(r, 100));
+        // Make stack/queue disappear for a moment so that it looks like a reset
+        (isStackMode ? stack : queue).render();
+        await new Promise(r => setTimeout(r, 100));
+    }
 
     const lines = code.split('\n');
     for (let line of lines) {
@@ -60,9 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const queue = new Queue();
 
     // event listener for "Run Code" button
+    document.getElementById('reset-run-code').addEventListener('click', async () => {
+        const code = document.getElementById('code-input').value;
+        await parseCode(code, true);
+    });
+
     document.getElementById('run-code').addEventListener('click', async () => {
         const code = document.getElementById('code-input').value;
-        await parseCode(code);
+        await parseCode(code, false);
     });
 
     // event listeners for mode switcher buttons

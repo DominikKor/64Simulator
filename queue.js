@@ -3,7 +3,7 @@ import DataStructure from "./dataStructure.js";
 class Queue extends DataStructure {
     enqueue(element) {
         if (this.items.length >= 6) {
-            alert("Der Stack ist voll!")
+            alert("Die Schlange ist voll!")
             return true;
         }
 
@@ -13,7 +13,7 @@ class Queue extends DataStructure {
 
     dequeue() {
         if (this.isEmpty()) {
-            alert("Die Queue ist leer!");
+            alert("Die Schlange ist leer!");
             return;
         }
         this.items.shift();
@@ -22,10 +22,10 @@ class Queue extends DataStructure {
 
     head() {
         if (this.isEmpty()) {
-            alert("Die Queue ist leer!");
+            alert("Die Schlange ist leer!");
             return;
         }
-        alert("Front-Element: " + this.items[0]);
+        alert("Head-Element: " + this.items[0]);
     }
 
     render() {

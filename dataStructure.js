@@ -19,7 +19,7 @@ class DataStructure {
             "beige": "beige",
             "gold": "gold",
             "silber": "silver",
-            "bronze": "bronze",
+            "bronze": "#CD7F32",
             "olivgrün": "olive",
             "türkis": "turquoise",
             "indigo": "indigo",

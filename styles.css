@@ -162,10 +162,14 @@ h1, h2 {
     padding-top: 5px;
 }
 
-#run-code {
+#run-buttons {
     margin-top: 10px;
     width: 100%;
-    padding: 10px;
+}
+
+#run-buttons button {
+    padding: 13px 10px 10px;
+    width: 50%;
 }
 
 .read-only-line {
@@ -186,4 +190,9 @@ h1, h2 {
 
 .form-floating > label::after {
     background-color: transparent !important;
+}
+
+#head-indicator {
+    font-weight: bold;
+    margin-left: 20px;
 }
