@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 switcher.style.setProperty('--switcher-width', '43%');
                 isStackMode = true;
 
-                modeTitle.textContent = 'Stack64.de';
+                modeTitle.textContent = 'STACK24 – Hier stack ich alles.';
                 modeTitle.classList.add('stack')
                 readOnlyCodeLine.innerHTML = 'Stack&lt;String&gt; s = new Stack&lt;String&gt;();';
                 queueDisplay.classList.add('display-none');
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 switcher.style.setProperty('--switcher-width', '50%');
                 isStackMode = false;
 
-                modeTitle.textContent = 'Queue64';
+                modeTitle.textContent = 'Queue24';
                 modeTitle.classList.remove('stack')
                 readOnlyCodeLine.innerHTML = 'Queue&lt;String&gt; q = new Queue&lt;String&gt;();';
                 stackDisplay.classList.add('display-none');
