@@ -235,17 +235,6 @@ mark {
     height: 100%;
 }
 
-.stack {
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    align-items: center;
-    border: 2px solid #333;
-    margin: 5px;
-    min-width: 100px;
-    flex-grow: 1;
-}
-
 .stack-label {
     font-size: 18px;
     padding: 5px;
@@ -272,17 +261,6 @@ footer {
     border-bottom: 2px solid #333;
     width: 100%;
     height: 100%;
-}
-
-.stack {
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    align-items: center;
-    border: 2px solid #333;
-    margin: 5px;
-    min-width: 100px;
-    flex-grow: 1;
 }
 
 .stack-label {

@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
         await parseCode(code, false);
     });
 
+    document.getElementById('clear-code').addEventListener('click', () => {
+        document.getElementById('code-input').value = '';
+    });
+
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(button => {
         button.addEventListener('click', () => {
