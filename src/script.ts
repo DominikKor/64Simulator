@@ -53,6 +53,17 @@ async function parseCode(code: string, doReset: boolean) {
     }
 }
 
+function clear() {
+    (document.getElementById('code-input') as HTMLTextAreaElement).value = '';
+    if (isStackMode) {
+        stack.items = [];
+        stack.render();
+    } else {
+        queue.items = [];
+        queue.render();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const modeTitle = document.getElementById('mode-title')! as HTMLHeadingElement;
     const switcher = document.querySelector('.mode-switcher')! as HTMLDivElement;
@@ -74,9 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await parseCode(code, false);
     });
 
-    document.getElementById('clear-code')!.addEventListener('click', () => {
-        (document.getElementById('code-input') as HTMLTextAreaElement).value = '';
-    });
+    document.querySelectorAll('.clear-btn').forEach(btn => btn.addEventListener('click', clear));
 
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(button => {

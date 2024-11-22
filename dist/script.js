@@ -105,6 +105,17 @@ function parseCode(code, doReset) {
         });
     });
 }
+function clear() {
+    document.getElementById('code-input').value = '';
+    if (isStackMode) {
+        stack.items = [];
+        stack.render();
+    }
+    else {
+        queue.items = [];
+        queue.render();
+    }
+}
 document.addEventListener('DOMContentLoaded', function () {
     var modeTitle = document.getElementById('mode-title');
     var switcher = document.querySelector('.mode-switcher');
@@ -140,9 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }); });
-    document.getElementById('clear-code').addEventListener('click', function () {
-        document.getElementById('code-input').value = '';
-    });
+    document.querySelectorAll('.clear-btn').forEach(function (btn) { return btn.addEventListener('click', clear); });
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(function (button) {
         button.addEventListener('click', function () {
