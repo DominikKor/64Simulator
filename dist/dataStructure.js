@@ -1,5 +1,6 @@
-class DataStructure {
-    germanColors = {
+var DataStructure = /** @class */ (function () {
+    function DataStructure() {
+        this.germanColors = {
             "weiß": "white",
             "schwarz": "black",
             "rot": "red",
@@ -46,48 +47,38 @@ class DataStructure {
             "elfenbein": "ivory",
             "creme": "cream",
             "blaugrün": "teal",
-        }
-
-    constructor() {
+        };
         this.items = [];
     }
-
-    isEmpty() {
+    DataStructure.prototype.isEmpty = function () {
         return this.items.length === 0;
-    }
-
-    isColorLight(color) {
+    };
+    DataStructure.prototype.isColorLight = function (color) {
         // Erstellen eines temporären Elements, um die RGB-Werte zu erhalten
-        const tempElem = document.createElement('div');
+        var tempElem = document.createElement('div');
         tempElem.style.color = color;
         document.body.appendChild(tempElem);
-
         // Extrahieren der RGB-Werte
-        const rgb = window.getComputedStyle(tempElem).color;
+        var rgb = window.getComputedStyle(tempElem).color;
         document.body.removeChild(tempElem);
-
-        const rgbValues = rgb.match(/\d+/g).map(Number);
+        var rgbValues = rgb.match(/\d+/g).map(Number);
         // Berechnung der Helligkeit anhand der RGB-Werte
-        const brightness = Math.round(((rgbValues[0] * 299) + (rgbValues[1] * 587) + (rgbValues[2] * 114)) / 1000);
+        var brightness = Math.round(((rgbValues[0] * 299) + (rgbValues[1] * 587) + (rgbValues[2] * 114)) / 1000);
         // Rückgabe true, wenn die Farbe hell ist
         return brightness > 155;
-    }
-
-    isColor(strColor) {
-        const s = new Option().style;
+    };
+    DataStructure.prototype.isColor = function (strColor) {
+        var s = new Option().style;
         s.color = strColor;
         return s.color !== '';
-    }
-
-    getColor(color) {
-        let newColor = color.toLowerCase();
-
+    };
+    DataStructure.prototype.getColor = function (color) {
+        var newColor = color.toLowerCase();
         if (this.germanColors[color]) {
             newColor = this.germanColors[color];
         }
-
         return this.isColor(newColor) ? newColor : 'grey';
-    }
-}
-
+    };
+    return DataStructure;
+}());
 export default DataStructure;

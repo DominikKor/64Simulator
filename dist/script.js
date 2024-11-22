@@ -1,195 +1,176 @@
-function getLineHeight(el) {
-    var temp = document.createElement(el.nodeName), ret;
-    temp.setAttribute("style", "margin:0; padding:0; "
-        + "font-family:" + (el.style.fontFamily || "inherit") + "; "
-        + "font-size:" + (el.style.fontSize || "inherit"));
-    temp.innerHTML = "A";
-    el.parentNode.appendChild(temp);
-    ret = temp.clientHeight;
-    temp.parentNode.removeChild(temp);
-    return ret;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+import Stack from './stack.js';
+import Queue from './queue.js';
+var isStackMode = true;
+var stack = new Stack();
+var queue = new Queue();
+function parseCode(code, doReset) {
+    return __awaiter(this, void 0, void 0, function () {
+        var lines, _i, lines_1, line, color, stackIsFull, color;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!doReset) return [3 /*break*/, 2];
+                    stack.items = [];
+                    queue.items = [];
+                    // Make stack/queue disappear for a moment so that it looks like a reset
+                    (isStackMode ? stack : queue).render();
+                    return [4 /*yield*/, new Promise(function (r) { return setTimeout(r, 100); })];
+                case 1:
+                    _a.sent();
+                    _a.label = 2;
+                case 2:
+                    lines = code.split('\n');
+                    for (_i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
+                        line = lines_1[_i];
+                        line = line.trim();
+                        if (isStackMode) {
+                            // Stack Mode
+                            if (line.startsWith('s.push')) {
+                                color = line.match(/"([^"]+)"/)[1];
+                                stackIsFull = stack.push(color);
+                                if (stackIsFull) {
+                                    break;
+                                }
+                            }
+                            else if (line.startsWith('s.pop')) {
+                                stack.pop();
+                            }
+                            else if (line.startsWith('s.top')) {
+                                stack.top();
+                            }
+                            else if (line.startsWith('s.isEmpty')) {
+                                alert(stack.isEmpty() ? "wahr" : "falsch");
+                            }
+                            else if (line.startsWith('Stack stack = new Stack()')) {
+                                // New stack instance, do later
+                            }
+                            stack.render();
+                        }
+                        else {
+                            // Queue mode
+                            if (line.startsWith('q.enqueue')) {
+                                color = line.match(/"([^"]+)"/)[1];
+                                queue.enqueue(color);
+                            }
+                            else if (line.startsWith('q.dequeue')) {
+                                queue.dequeue();
+                            }
+                            else if (line.startsWith('q.isEmpty')) {
+                                alert(queue.isEmpty() ? "wahr" : "falsch");
+                            }
+                            else if (line.startsWith('q.head')) {
+                                queue.head();
+                            }
+                            queue.render();
+                        }
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
 }
-class Stack {
-    items = [];
-    constructor() {
-        this.items = [];
-    }
-    push(element) {
-        if (this.items.length >= 6) {
-            alert("Der Stack ist voll!");
-            return true;
-        }
-        this.items.push(element);
-        return false;
-    }
-    pop() {
-        if (this.isEmpty()) {
-            alert("Der Stack ist leer!");
-            return;
-        }
-        this.items.pop();
-    }
-    top() {
-        if (this.isEmpty()) {
-            alert("Der Stack ist leer!");
-            return;
-        }
-        alert("Top-Element: " + this.items[this.items.length - 1]);
-    }
-    isEmpty() {
-        return this.items.length === 0;
-    }
-    isColor(strColor) {
-        const s = new Option().style;
-        s.color = strColor;
-        return s.color !== '';
-    }
-    render(stackContainer) {
-        stackContainer.innerHTML = '';
-        for (let i = 0; i < this.items.length; i++) {
-            const container = document.createElement('div');
-            container.classList.add('stack-element');
-            container.style.backgroundColor = this.isColor(this.items[i]) ? this.items[i] : "grey";
-            const label = document.createElement('span');
-            label.textContent = this.items[i];
-            if (this.isColorLight(this.items[i])) {
-                label.style.color = 'black';
+document.addEventListener('DOMContentLoaded', function () {
+    var modeTitle = document.getElementById('mode-title');
+    var switcher = document.querySelector('.mode-switcher');
+    var stackDisplay = document.getElementById('stack-display');
+    var queueDisplay = document.getElementById('queue-display');
+    var readOnlyCodeLine = document.getElementById('read-only-code-line');
+    var stack = new Stack();
+    var queue = new Queue();
+    // event listener for "Run Code" button
+    document.getElementById('reset-run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var code;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    code = document.getElementById('code-input').value;
+                    return [4 /*yield*/, parseCode(code, true)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    document.getElementById('run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var code;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    code = document.getElementById('code-input').value;
+                    return [4 /*yield*/, parseCode(code, false)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    document.getElementById('clear-code').addEventListener('click', function () {
+        document.getElementById('code-input').value = '';
+    });
+    // event listeners for mode switcher buttons
+    document.querySelectorAll('.btn-mode').forEach(function (button) {
+        button.addEventListener('click', function () {
+            // Remove "active" class from all buttons
+            document.querySelectorAll('.btn-mode').forEach(function (btn) { return btn.classList.remove('active'); });
+            button.classList.add('active');
+            if (button.dataset.mode === 'stack') {
+                switcher.style.setProperty('--switcher-position', '5px'); // Move to left
+                switcher.style.setProperty('--switcher-width', '43%');
+                isStackMode = true;
+                modeTitle.textContent = 'STACK24 – Hier stack ich alles.';
+                modeTitle.classList.add('stack');
+                readOnlyCodeLine.innerHTML = 'Stack&lt;String&gt; s = new Stack&lt;String&gt;();';
+                queueDisplay.classList.add('display-none');
+                stackDisplay.classList.remove('display-none');
+                stack.render();
             }
             else {
-                label.style.color = 'white';
+                switcher.style.setProperty('--switcher-position', '47%'); // Move to right
+                switcher.style.setProperty('--switcher-width', '50%');
+                isStackMode = false;
+                modeTitle.textContent = 'Queue24';
+                modeTitle.classList.remove('stack');
+                readOnlyCodeLine.innerHTML = 'Queue&lt;String&gt; q = new Queue&lt;String&gt;();';
+                stackDisplay.classList.add('display-none');
+                queueDisplay.classList.remove('display-none');
+                queue.render();
             }
-            container.appendChild(label);
-            stackContainer.appendChild(container);
-        }
-    }
-    isColorLight(color) {
-        const tempElem = document.createElement('div');
-        tempElem.style.color = color;
-        document.body.appendChild(tempElem);
-        const rgb = window.getComputedStyle(tempElem).color;
-        document.body.removeChild(tempElem);
-        const rgbValues = rgb.match(/\d+/g).map(Number);
-        const brightness = Math.round(((rgbValues[0] * 299) +
-            (rgbValues[1] * 587) +
-            (rgbValues[2] * 114)) / 1000);
-        return brightness > 155;
-    }
-}
-let stacks = {};
-let activeLine = -1;
-const codeInput = document.getElementById('code-input');
-const highlight = document.getElementById('code-highlight');
-function highlightActiveLine() {
-    const lineHeight = parseInt(window.getComputedStyle(codeInput).lineHeight);
-    const paddingTop = parseInt(window.getComputedStyle(codeInput).paddingTop);
-    let top = paddingTop + codeInput.offsetTop + 2;
-    if (activeLine >= 0) {
-        if (codeInput.offsetHeight <= (activeLine + 1.5) * lineHeight)
-            highlight.style.opacity = "0";
-        else
-            highlight.style.opacity = "1";
-        highlight.style.top = `${activeLine * lineHeight + top}px`;
-        highlight.style.height = `${lineHeight}px`;
-        highlight.style.width = `${codeInput.offsetWidth}px`;
-    }
-    else {
-        highlight.style.opacity = "0";
-    }
-    document.getElementById('run-line').innerHTML = "Zeile " + (activeLine + 1) + " ausführen";
-}
-function renderStacks() {
-    const stackContainer = document.getElementById("stack-container");
-    stackContainer.innerHTML = "";
-    for (const [name, stack] of Object.entries(stacks)) {
-        const stackE = document.createElement("div");
-        stackE.classList.add("stack");
-        const stackElements = document.createElement("div");
-        stackElements.classList.add("stack-elements");
-        stackE.appendChild(stackElements);
-        stack.render(stackElements);
-        const stackLabel = document.createElement("span");
-        stackLabel.classList.add("stack-label");
-        stackLabel.innerHTML = name;
-        stackE.appendChild(stackLabel);
-        stackContainer.appendChild(stackE);
-    }
-}
-function parseCode(codeline) {
-    console.log(codeline);
-    let line = codeline.trim();
-    let m;
-    if ((m = line.match(/([A-Za-z0-9äÄöÖüÜ_]+)\.push\("([A-Za-z0-9äÄöÖüÜ_#]+)"\);/)) != null) {
-        if (m[1] in stacks) {
-            stacks[m[1]].push(m[2]);
-        }
-        else {
-            alert(`Stapel ${m[1]} existiert nicht`);
-        }
-    }
-    else if ((m = line.match(/([A-Za-z0-9äÄöÖüÜ_]+)\.pop\(\);/)) != null) {
-        if (m[1] in stacks) {
-            stacks[m[1]].pop();
-        }
-        else {
-            alert(`Stapel ${m[1]} existiert nicht`);
-        }
-    }
-    else if ((m = line.match(/([A-Za-z0-9äÄöÖüÜ_]+)\.top\(\);/)) != null) {
-        if (m[1] in stacks) {
-            stacks[m[1]].top();
-        }
-        else {
-            alert(`Stapel ${m[1]} existiert nicht`);
-        }
-    }
-    else if ((m = line.match(/([A-Za-z0-9äÄöÖüÜ_]+)\.isEmpty\(\);/)) != null) {
-        if (m[1] in stacks) {
-            alert(stacks[m[1]].isEmpty() ? `Stapel ${m[1]} ist leer` : `Stapel ${m[1]} ist nicht leer`);
-        }
-        else {
-            alert(`Stapel ${m[1]} existiert nicht`);
-        }
-    }
-    else if ((m = line.match(/Stack(?:<(?:[A-Z][a-zA-Z0-9_]*)?>)? *([A-Za-z0-9äÄöÖüÜ_]+) *= *new *Stack(?:<(?:[A-Z][a-zA-Z0-9_]*)?>)?\(\);/)) != null) {
-        if (!(m[1] in stacks)) {
-            console.log(m);
-            stacks[m[1]] = new Stack();
-        }
-        else {
-            alert(`Stapel ${m[1]} existiert bereits`);
-        }
-    }
-    renderStacks();
-}
-function runNextLine() {
-    const code = codeInput.value.trim();
-    const lines = code.split('\n');
-    const nextLine = activeLine + 1;
-    if (lines.length >= nextLine) {
-        activeLine = nextLine;
-        highlightActiveLine();
-        parseCode(lines[activeLine]);
-    }
-}
-codeInput.addEventListener('input', highlightActiveLine);
-new ResizeObserver(highlightActiveLine).observe(codeInput);
-window.addEventListener('resize', highlightActiveLine);
-window.addEventListener('DOMContentLoaded', highlightActiveLine);
-document.getElementById('run-code').addEventListener('click', () => {
-    stacks = {};
-    activeLine = -1;
-    highlightActiveLine();
-    const code = codeInput.value;
-    const lines = code.split('\n');
-    for (let line of lines)
-        parseCode(line);
+        });
+    });
 });
-document.getElementById('run-line').addEventListener('click', runNextLine);
-document.getElementById('reset').addEventListener('click', () => {
-    codeInput.value = "";
-    stacks = {};
-    renderStacks();
-    activeLine = -1;
-    highlightActiveLine();
-});
-//# sourceMappingURL=script.js.map

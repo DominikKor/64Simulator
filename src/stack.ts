@@ -1,7 +1,7 @@
 import DataStructure from "./dataStructure.js";
 
 class Stack extends DataStructure {
-    push(element) {
+    push(element: string) {
         if (this.items.length >= 6) {
             alert("Der Stapel ist voll!")
             return true;
@@ -29,7 +29,7 @@ class Stack extends DataStructure {
     }
 
     render() {
-        const stackContainer = document.getElementById('stack-container');
+        const stackContainer = document.getElementById('stack-container')! as HTMLDivElement;
         stackContainer.innerHTML = '';
         for (let i = 0; i < this.items.length; i++) {
             const container = document.createElement('div');
