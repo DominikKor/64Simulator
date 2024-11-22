@@ -120,6 +120,7 @@ function highlightActiveLine() {
     } else {
         highlight.style.opacity = "0";
     }
+    document.getElementById('run-line')!.innerHTML = "Zeile " + (activeLine + 1) + " ausführen";
 }
 
 function renderStacks() {
@@ -206,7 +207,7 @@ function parseCode(codeline: string) {
 }
 
 function runNextLine() {
-    const code = codeInput.value;
+    const code = codeInput.value.trim();
     const lines = code.split('\n');
     const nextLine = activeLine + 1;
     if (lines.length >= nextLine) {
@@ -230,6 +231,8 @@ document.getElementById('run-code')!.addEventListener('click', () => {
     const lines = code.split('\n');
     for (let line of lines) parseCode(line);
 });
+
+document.getElementById('run-line')!.addEventListener('click', runNextLine);
 
 document.getElementById('reset')!.addEventListener('click', () => {
     codeInput.value = "";

@@ -95,6 +95,7 @@ function highlightActiveLine() {
     else {
         highlight.style.opacity = "0";
     }
+    document.getElementById('run-line').innerHTML = "Zeile " + (activeLine + 1) + " ausführen";
 }
 function renderStacks() {
     const stackContainer = document.getElementById("stack-container");
@@ -160,6 +161,16 @@ function parseCode(codeline) {
     }
     renderStacks();
 }
+function runNextLine() {
+    const code = codeInput.value.trim();
+    const lines = code.split('\n');
+    const nextLine = activeLine + 1;
+    if (lines.length >= nextLine) {
+        activeLine = nextLine;
+        highlightActiveLine();
+        parseCode(lines[activeLine]);
+    }
+}
 codeInput.addEventListener('input', highlightActiveLine);
 new ResizeObserver(highlightActiveLine).observe(codeInput);
 window.addEventListener('resize', highlightActiveLine);
@@ -173,6 +184,7 @@ document.getElementById('run-code').addEventListener('click', () => {
     for (let line of lines)
         parseCode(line);
 });
+document.getElementById('run-line').addEventListener('click', runNextLine);
 document.getElementById('reset').addEventListener('click', () => {
     codeInput.value = "";
     stacks = {};
