@@ -10,13 +10,13 @@ h1, h2 {
     font-weight: bold;
 }
 
-#mode-title.stack {
-    color: rgb(22, 54, 111);
-    font-family: "Rubik", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: italic;
-}
+/*#mode-title.stack {*/
+/*    color: rgb(22, 54, 111);*/
+/*    font-family: "Rubik", sans-serif;*/
+/*    font-optical-sizing: auto;*/
+/*    font-weight: 700;*/
+/*    font-style: italic;*/
+/*}*/
 
 .header {
     border-bottom: 1px solid #e0e0e0;
