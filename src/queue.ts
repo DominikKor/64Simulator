@@ -1,7 +1,7 @@
 import DataStructure from "./dataStructure.js";
 
 class Queue extends DataStructure {
-    enqueue(element) {
+    enqueue(element: string) {
         if (this.items.length >= 6) {
             alert("Die Schlange ist voll!")
             return true;
@@ -29,7 +29,7 @@ class Queue extends DataStructure {
     }
 
     render() {
-        const queueContainer = document.getElementById('queue-container');
+        const queueContainer = document.getElementById('queue-container')! as HTMLDivElement;
         queueContainer.innerHTML = '';
         for (let i = 0; i < this.items.length; i++) {
             const container = document.createElement('div');

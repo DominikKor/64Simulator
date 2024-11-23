@@ -5,7 +5,7 @@ let isStackMode = true;
 const stack = new Stack();
 const queue = new Queue();
 
-async function parseCode(code, doReset) {
+async function parseCode(code: string, doReset: boolean) {
     if (doReset) {
         stack.items = [];
         queue.items = [];
@@ -21,7 +21,7 @@ async function parseCode(code, doReset) {
         if (isStackMode) {
             // Stack Mode
             if (line.startsWith('s.push')) {
-                const color = line.match(/"([^"]+)"/)[1];
+                const color = line.match(/"([^"]+)"/)![1];
                 let stackIsFull = stack.push(color);
                 if (stackIsFull) {
                     break;
@@ -39,7 +39,7 @@ async function parseCode(code, doReset) {
         } else {
             // Queue mode
             if (line.startsWith('q.enqueue')) {
-                const color = line.match(/"([^"]+)"/)[1];
+                const color = line.match(/"([^"]+)"/)![1];
                 queue.enqueue(color);
             } else if (line.startsWith('q.dequeue')) {
                 queue.dequeue();
@@ -52,26 +52,40 @@ async function parseCode(code, doReset) {
         }
     }
 }
-
 document.addEventListener('DOMContentLoaded', () => {
-    const modeTitle = document.getElementById('mode-title');
-    const switcher = document.querySelector('.mode-switcher');
-    const stackDisplay = document.getElementById('stack-display');
-    const queueDisplay = document.getElementById('queue-display');
-    const readOnlyCodeLine = document.getElementById('read-only-code-line');
-
-    const stack = new Stack();
-    const queue = new Queue();
+    const modeTitle = document.getElementById('mode-title')! as HTMLHeadingElement;
+    const switcher = document.querySelector('.mode-switcher')! as HTMLDivElement;
+    const stackDisplay = document.getElementById('stack-display')! as HTMLDivElement;
+    const queueDisplay = document.getElementById('queue-display')! as HTMLDivElement;
+    const readOnlyCodeLine = document.getElementById('read-only-code-line')! as HTMLDivElement;
 
     // event listener for "Run Code" button
-    document.getElementById('reset-run-code').addEventListener('click', async () => {
-        const code = document.getElementById('code-input').value;
+    document.getElementById('reset-run-code')!.addEventListener('click', async () => {
+        const code = (document.getElementById('code-input') as HTMLTextAreaElement).value;
         await parseCode(code, true);
     });
 
-    document.getElementById('run-code').addEventListener('click', async () => {
-        const code = document.getElementById('code-input').value;
+    document.getElementById('run-code')!.addEventListener('click', async () => {
+        const code = (document.getElementById('code-input') as HTMLTextAreaElement).value;
         await parseCode(code, false);
+    });
+
+    document.getElementById("clear-all")!.addEventListener('click', () => {
+        (document.getElementById('code-input') as HTMLTextAreaElement).value = '';
+        stack.items = [];
+        stack.render();
+        queue.items = [];
+        queue.render();
+    });
+
+    document.getElementById("clear-stack")!.addEventListener('click', () => {
+        stack.items = [];
+        stack.render();
+    });
+
+    document.getElementById("clear-queue")!.addEventListener('click', () => {
+        queue.items = [];
+        queue.render();
     });
 
     // event listeners for mode switcher buttons
@@ -81,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.btn-mode').forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
-            if (button.dataset.mode === 'stack') {
+            if ((button as HTMLButtonElement).dataset.mode === 'stack') {
                 switcher.style.setProperty('--switcher-position', '5px'); // Move to left
                 switcher.style.setProperty('--switcher-width', '43%');
                 isStackMode = true;

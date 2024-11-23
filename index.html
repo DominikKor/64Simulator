@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
           rel="stylesheet">
+    <link rel="icon" href="stack24.png" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -18,11 +19,16 @@
                 <button class="btn btn-mode active" id="mode-stack" data-mode="stack">Stapel</button>
                 <button class="btn btn-mode ms-2" id="mode-queue" data-mode="queue" style="margin-right: 3px">Schlange</button>
             </div>
+            <a href="https://github.com/DominikKor/64Simulator" target="_blank" class="icon-link link-dark" title="Zum GitHub-Repository des Tools" aria-label="GitHub-Repository link" style="margin-left: 10px;"><ion-icon name="logo-github" size="large"></ion-icon></a>
         </div>
     </div>
     <div class="container">
         <div class="editor">
-            <h2>Code-Editor</h2>
+            <div class="d-flex">
+                <h2>Code-Editor</h2>
+                <div class="flex-grow-1" aria-hidden="true"></div>
+                <button class="btn" id="clear-all"><ion-icon name="trash-outline"></ion-icon></button>
+            </div>
             <div class="form-floating">
                 <div id="read-only-code-line" class="form-control read-only-line">
                     Stack&lt;String&gt; s = new Stack&lt;String&gt;();
@@ -42,11 +48,19 @@
             </div>
         </div>
         <div id="stack-display">
-            <h2 class="mode-visualiser-title">Stapel</h2>
+            <div class="d-flex">
+                <h2 class="mode-visualiser-title">Stapel</h2>
+                <div class="flex-grow-1" aria-hidden="true"></div>
+                <button class="btn" id="clear-stack"><ion-icon name="trash-outline"></ion-icon></button>
+            </div>
             <div id="stack-container"></div>
         </div>
         <div id="queue-display" class="display-none">
-            <h2 class="mode-visualiser-title">Schlange</h2>
+            <div class="d-flex">
+                <h2 class="mode-visualiser-title">Schlange</h2>
+                <div class="flex-grow-1" aria-hidden="true"></div>
+                <button class="btn" id="clear-queue"><ion-icon name="trash-outline"></ion-icon></button>
+            </div>
             <div id="queue-container"></div>
             <span id="head-indicator">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708z"/></svg>
@@ -55,6 +69,8 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="script.js" type="module"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="dist/script.js" type="module"></script>
 </body>
 </html>
