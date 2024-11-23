@@ -105,25 +105,12 @@ function parseCode(code, doReset) {
         });
     });
 }
-function clear() {
-    document.getElementById('code-input').value = '';
-    if (isStackMode) {
-        stack.items = [];
-        stack.render();
-    }
-    else {
-        queue.items = [];
-        queue.render();
-    }
-}
 document.addEventListener('DOMContentLoaded', function () {
     var modeTitle = document.getElementById('mode-title');
     var switcher = document.querySelector('.mode-switcher');
     var stackDisplay = document.getElementById('stack-display');
     var queueDisplay = document.getElementById('queue-display');
     var readOnlyCodeLine = document.getElementById('read-only-code-line');
-    var stack = new Stack();
-    var queue = new Queue();
     // event listener for "Run Code" button
     document.getElementById('reset-run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
         var code;
@@ -151,7 +138,21 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }); });
-    document.querySelectorAll('.clear-btn').forEach(function (btn) { return btn.addEventListener('click', clear); });
+    document.getElementById("clear-all").addEventListener('click', function () {
+        document.getElementById('code-input').value = '';
+        stack.items = [];
+        stack.render();
+        queue.items = [];
+        queue.render();
+    });
+    document.getElementById("clear-stack").addEventListener('click', function () {
+        stack.items = [];
+        stack.render();
+    });
+    document.getElementById("clear-queue").addEventListener('click', function () {
+        queue.items = [];
+        queue.render();
+    });
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(function (button) {
         button.addEventListener('click', function () {
