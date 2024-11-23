@@ -116,6 +116,18 @@ function clear() {
         queue.render();
     }
 }
+function updateEditorMode(lineMode) {
+    var allEditor = document.getElementById("all-editor");
+    var lineEditor = document.getElementById("line-editor");
+    if (lineMode) {
+        allEditor.classList.add('visually-hidden');
+        lineEditor.classList.remove('visually-hidden');
+    }
+    else {
+        allEditor.classList.remove('visually-hidden');
+        lineEditor.classList.add('visually-hidden');
+    }
+}
 document.addEventListener('DOMContentLoaded', function () {
     var modeTitle = document.getElementById('mode-title');
     var switcher = document.querySelector('.mode-switcher');
@@ -151,6 +163,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }); });
+    document.getElementById('editor-mode-all').addEventListener('click', function () { return updateEditorMode(false); });
+    document.getElementById('editor-mode-line').addEventListener('click', function () { return updateEditorMode(true); });
+    updateEditorMode(document.getElementById('editor-mode-line').checked);
     document.querySelectorAll('.clear-btn').forEach(function (btn) { return btn.addEventListener('click', clear); });
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(function (button) {

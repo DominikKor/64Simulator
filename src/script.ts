@@ -64,6 +64,18 @@ function clear() {
     }
 }
 
+function updateEditorMode(lineMode: boolean) {
+    const allEditor = document.getElementById("all-editor")! as HTMLDivElement;
+    const lineEditor = document.getElementById("line-editor")! as HTMLDivElement;
+    if (lineMode) {
+        allEditor.classList.add('visually-hidden');
+        lineEditor.classList.remove('visually-hidden');
+    } else {
+        allEditor.classList.remove('visually-hidden');
+        lineEditor.classList.add('visually-hidden');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const modeTitle = document.getElementById('mode-title')! as HTMLHeadingElement;
     const switcher = document.querySelector('.mode-switcher')! as HTMLDivElement;
@@ -84,6 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const code = (document.getElementById('code-input') as HTMLTextAreaElement).value;
         await parseCode(code, false);
     });
+
+    document.getElementById('editor-mode-all')!.addEventListener('click', () => updateEditorMode(false));
+    document.getElementById('editor-mode-line')!.addEventListener('click', () => updateEditorMode(true));
+
+    updateEditorMode((document.getElementById('editor-mode-line')! as HTMLInputElement).checked)
 
     document.querySelectorAll('.clear-btn').forEach(btn => btn.addEventListener('click', clear));
 
