@@ -157,7 +157,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateEditorMode((document.getElementById('editor-mode-line')! as HTMLInputElement).checked)
 
-    document.querySelectorAll('.clear-btn').forEach(btn => btn.addEventListener('click', clear));
+    document.getElementById("clear-all")!.addEventListener('click', () => {
+        (document.getElementById('code-input') as HTMLTextAreaElement).value = '';
+        stack.items = [];
+        stack.render();
+        queue.items = [];
+        queue.render();
+    });
+
+    document.getElementById("clear-stack")!.addEventListener('click', () => {
+        stack.items = [];
+        stack.render();
+    });
+
+    document.getElementById("clear-queue")!.addEventListener('click', () => {
+        queue.items = [];
+        queue.render();
+    });
 
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(button => {

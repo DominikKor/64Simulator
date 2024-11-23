@@ -216,7 +216,21 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('editor-mode-all').addEventListener('click', function () { return updateEditorMode(false); });
     document.getElementById('editor-mode-line').addEventListener('click', function () { return updateEditorMode(true); });
     updateEditorMode(document.getElementById('editor-mode-line').checked);
-    document.querySelectorAll('.clear-btn').forEach(function (btn) { return btn.addEventListener('click', clear); });
+    document.getElementById("clear-all").addEventListener('click', function () {
+        document.getElementById('code-input').value = '';
+        stack.items = [];
+        stack.render();
+        queue.items = [];
+        queue.render();
+    });
+    document.getElementById("clear-stack").addEventListener('click', function () {
+        stack.items = [];
+        stack.render();
+    });
+    document.getElementById("clear-queue").addEventListener('click', function () {
+        queue.items = [];
+        queue.render();
+    });
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(function (button) {
         button.addEventListener('click', function () {
