@@ -116,7 +116,7 @@ function parseCode(code, doReset) {
         });
     });
 }
-function clear() {
+function clearAll() {
     document.getElementById('code-input').value = '';
     if (isStackMode) {
         stack.items = [];
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var queueDisplay = document.getElementById('queue-display');
     var resetRunCode = document.getElementById('reset-run-code');
     var runCode = document.getElementById('run-code');
-    clear();
+    clearAll();
     // event listener for "Run Code" button
     resetRunCode.addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
         var code;
@@ -242,13 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('editor-mode-all').addEventListener('click', function () { return updateEditorMode(false); });
     document.getElementById('editor-mode-line').addEventListener('click', function () { return updateEditorMode(true); });
     updateEditorMode(document.getElementById('editor-mode-line').checked);
-    document.getElementById("clear-all").addEventListener('click', function () {
-        document.getElementById('code-input').value = '';
-        stack.items = [];
-        stack.render();
-        queue.items = [];
-        queue.render();
-    });
+    document.getElementById("clear-all").addEventListener('click', clearAll);
     document.getElementById("clear-stack").addEventListener('click', function () {
         stack.items = [];
         stack.render();

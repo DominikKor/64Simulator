@@ -66,7 +66,7 @@ async function parseCode(code: string, doReset: boolean) {
     }
 }
 
-function clear() {
+function clearAll() {
     (document.getElementById('code-input') as HTMLTextAreaElement).value = '';
     if (isStackMode) {
         stack.items = [];
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetRunCode = document.getElementById('reset-run-code')! as HTMLButtonElement;
     const runCode = document.getElementById('run-code')! as HTMLButtonElement;
 
-    clear();
+    clearAll();
 
     // event listener for "Run Code" button
     resetRunCode.addEventListener('click', async () => {
@@ -187,13 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateEditorMode((document.getElementById('editor-mode-line')! as HTMLInputElement).checked)
 
-    document.getElementById("clear-all")!.addEventListener('click', () => {
-        (document.getElementById('code-input') as HTMLTextAreaElement).value = '';
-        stack.items = [];
-        stack.render();
-        queue.items = [];
-        queue.render();
-    });
+    document.getElementById("clear-all")!.addEventListener('click', clearAll);
 
     document.getElementById("clear-stack")!.addEventListener('click', () => {
         stack.items = [];
