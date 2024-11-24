@@ -7,6 +7,17 @@ let editorLineMode = false;
 const stack = new Stack();
 const queue = new Queue();
 
+const titles: string[] = [ // 0: mode 1: editor mode 2: button
+    "Setze den Stapel zurück und führe den Code aus",
+    "Setze die Sschlange zurück und führe den Code aus",
+    "Setze den Stapel zurück und beginne mit der ersten Zeile",
+    "Setze die Schlange zurück und beginne mit der ersten Zeile",
+    "Führe den Code mit dem existierenden Inhalt des Stapels aus",
+    "Führe den Code mit dem existierenden Inhalt der Schlange aus",
+    "Führe die nächste Zeile mit dem Stapel aus",
+    "Führe die nächste Zeile mit der Schlange aus"
+]
+
 async function parseCode(code: string, doReset: boolean) {
     if (doReset) {
         stack.items = [];
@@ -81,6 +92,7 @@ function updateEditorMode(lineMode: boolean) {
         allEditor.classList.remove('visually-hidden');
         lineEditor.classList.add('visually-hidden');
     }
+    setRunButtonTitles();
 }
 
 function runNextLine(reset: boolean = false) {
@@ -122,16 +134,28 @@ function resetLineEditor() {
     }
 }
 
+function setRunButtonTitles() {
+    const resetRunCode = document.getElementById('reset-run-code')! as HTMLButtonElement;
+    const runCode = document.getElementById('run-code')! as HTMLButtonElement;
+
+    const id = (!isStackMode ? 1 : 0) + (editorLineMode ? 2 : 0)
+    resetRunCode.title = titles[id];
+    runCode.title = titles[id + 4]
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const modeTitle = document.getElementById('mode-title')! as HTMLHeadingElement;
     const switcher = document.querySelector('.mode-switcher')! as HTMLDivElement;
     const stackDisplay = document.getElementById('stack-display')! as HTMLDivElement;
     const queueDisplay = document.getElementById('queue-display')! as HTMLDivElement;
 
+    const resetRunCode = document.getElementById('reset-run-code')! as HTMLButtonElement;
+    const runCode = document.getElementById('run-code')! as HTMLButtonElement;
+
     clear();
 
     // event listener for "Run Code" button
-    document.getElementById('reset-run-code')!.addEventListener('click', async () => {
+    resetRunCode.addEventListener('click', async () => {
         if (editorLineMode) {
             resetLineEditor();
             runNextLine(true);
@@ -142,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.getElementById('run-code')!.addEventListener('click', async () => {
+    runCode.addEventListener('click', async () => {
         if (editorLineMode) {
             runNextLine();
         } else {
@@ -210,6 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 queueDisplay.classList.remove('display-none');
                 queue.render();
             }
+            setRunButtonTitles();
         });
     });
+
+    setRunButtonTitles();
 });

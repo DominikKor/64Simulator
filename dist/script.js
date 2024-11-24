@@ -40,6 +40,16 @@ var isStackMode = true;
 var editorLineMode = false;
 var stack = new Stack();
 var queue = new Queue();
+var titles = [
+    "Setze den Stapel zurück und führe den Code aus",
+    "Setze die Sschlange zurück und führe den Code aus",
+    "Setze den Stapel zurück und beginne mit der ersten Zeile",
+    "Setze die Schlange zurück und beginne mit der ersten Zeile",
+    "Führe den Code mit dem existierenden Inhalt des Stapels aus",
+    "Führe den Code mit dem existierenden Inhalt der Schlange aus",
+    "Führe die nächste Zeile mit dem Stapel aus",
+    "Führe die nächste Zeile mit der Schlange aus"
+];
 function parseCode(code, doReset) {
     return __awaiter(this, void 0, void 0, function () {
         var lines, _i, lines_1, line, color, stackIsFull, color;
@@ -132,6 +142,7 @@ function updateEditorMode(lineMode) {
         allEditor.classList.remove('visually-hidden');
         lineEditor.classList.add('visually-hidden');
     }
+    setRunButtonTitles();
 }
 function runNextLine(reset) {
     if (reset === void 0) { reset = false; }
@@ -169,14 +180,23 @@ function resetLineEditor() {
         lineInput.value = lineInput.value.trim();
     }
 }
+function setRunButtonTitles() {
+    var resetRunCode = document.getElementById('reset-run-code');
+    var runCode = document.getElementById('run-code');
+    var id = (!isStackMode ? 1 : 0) + (editorLineMode ? 2 : 0);
+    resetRunCode.title = titles[id];
+    runCode.title = titles[id + 4];
+}
 document.addEventListener('DOMContentLoaded', function () {
     var modeTitle = document.getElementById('mode-title');
     var switcher = document.querySelector('.mode-switcher');
     var stackDisplay = document.getElementById('stack-display');
     var queueDisplay = document.getElementById('queue-display');
+    var resetRunCode = document.getElementById('reset-run-code');
+    var runCode = document.getElementById('run-code');
     clear();
     // event listener for "Run Code" button
-    document.getElementById('reset-run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
+    resetRunCode.addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
         var code;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -195,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }); });
-    document.getElementById('run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
+    runCode.addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
         var code;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -265,6 +285,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 queueDisplay.classList.remove('display-none');
                 queue.render();
             }
+            setRunButtonTitles();
         });
     });
+    setRunButtonTitles();
 });
