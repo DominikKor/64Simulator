@@ -29,19 +29,40 @@
                 <div class="flex-grow-1" aria-hidden="true"></div>
                 <button class="btn" id="clear-all"><ion-icon name="trash-outline"></ion-icon></button>
             </div>
-            <div class="form-floating">
-                <div id="read-only-code-line" class="form-control read-only-line">
+            <div class="form-floating" id="all-editor">
+                <div class="form-control read-only-line read-only-code-line">
                     Stack&lt;String&gt; s = new Stack&lt;String&gt;();
                 </div>
                 <textarea id="code-input" class="form-control code-textarea"></textarea>
-                <label for="code-input">Schreibe hier Deinen Java-Code...</label>
+                <label for="code-input">Schreibe hier deinen Java-Code...</label>
             </div>
-            <div id="run-buttons" class="btn-group" role="group" aria-label="Basic example">
-                <button class="btn btn-outline-dark" id="reset-run-code">
+            <div id="line-editor" class="form-floating visually-hidden">
+                <div class="form-control read-only-line read-only-code-line">
+                    Stack&lt;String&gt; s = new Stack&lt;String&gt;();
+                </div>
+                <span id="ran-code" class="form-control">
+
+                </span>
+                <span id="last-line" class="form-control">
+
+                </span>
+                <textarea id="line-input" class="form-control code-textarea"></textarea>
+                <label for="line-input">Schreibe hier deinen Java-Code...</label>
+            </div>
+            <div id="editor-mode-group" class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="editor-mode" id="editor-mode-all" autocomplete="off" checked>
+                <label class="btn btn-outline-dark w-50" for="editor-mode-all">Standard-Modus</label>
+
+                <input type="radio" class="btn-check" name="editor-mode" id="editor-mode-line" autocomplete="off">
+                <label class="btn btn-outline-dark w-50" for="editor-mode-line">Zeilen-Modus</label>
+            </div>
+
+            <div id="run-buttons" class="btn-group" role="group">
+                <button class="btn btn-outline-dark w-50" id="reset-run-code">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/></svg>
                     Leeren & Ausführen
                 </button>
-                <button class="btn btn-dark" id="run-code">
+                <button class="btn btn-dark w-50" id="run-code">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
                     Code Ausführen
                 </button>
