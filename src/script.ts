@@ -151,7 +151,6 @@ function setTitles() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modeTitle = document.getElementById('mode-title')! as HTMLHeadingElement;
     const switcher = document.querySelector('.mode-switcher')! as HTMLDivElement;
     const stackDisplay = document.getElementById('stack-display')! as HTMLDivElement;
     const queueDisplay = document.getElementById('queue-display')! as HTMLDivElement;
@@ -217,8 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 switcher.style.setProperty('--switcher-width', '43%');
                 isStackMode = true;
 
-                modeTitle.textContent = 'STACK24 – Hier stack ich alles.';
-                modeTitle.classList.add('stack')
                 setReadOnlyCodeLine('Stack&lt;String&gt; s = new Stack&lt;String&gt;();');
                 queueDisplay.classList.add('display-none');
                 stackDisplay.classList.remove('display-none');
@@ -228,8 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 switcher.style.setProperty('--switcher-width', '50%');
                 isStackMode = false;
 
-                modeTitle.textContent = 'Queue24';
-                modeTitle.classList.remove('stack')
                 setReadOnlyCodeLine('Queue&lt;String&gt; q = new Queue&lt;String&gt;();');
                 stackDisplay.classList.add('display-none');
                 queueDisplay.classList.remove('display-none');

@@ -1,2 +1,7 @@
 .idea/
 venv/
+node_modules/
+.venv/
+
+package.json
+package-lock.json

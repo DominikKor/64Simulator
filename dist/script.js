@@ -194,7 +194,6 @@ function setTitles() {
     clearQueue.title = "Setze die Schlange zurück";
 }
 document.addEventListener('DOMContentLoaded', function () {
-    var modeTitle = document.getElementById('mode-title');
     var switcher = document.querySelector('.mode-switcher');
     var stackDisplay = document.getElementById('stack-display');
     var queueDisplay = document.getElementById('queue-display');
@@ -267,8 +266,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 switcher.style.setProperty('--switcher-position', '5px'); // Move to left
                 switcher.style.setProperty('--switcher-width', '43%');
                 isStackMode = true;
-                modeTitle.textContent = 'STACK24 – Hier stack ich alles.';
-                modeTitle.classList.add('stack');
                 setReadOnlyCodeLine('Stack&lt;String&gt; s = new Stack&lt;String&gt;();');
                 queueDisplay.classList.add('display-none');
                 stackDisplay.classList.remove('display-none');
@@ -278,8 +275,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 switcher.style.setProperty('--switcher-position', '47%'); // Move to right
                 switcher.style.setProperty('--switcher-width', '50%');
                 isStackMode = false;
-                modeTitle.textContent = 'Queue24';
-                modeTitle.classList.remove('stack');
                 setReadOnlyCodeLine('Queue&lt;String&gt; q = new Queue&lt;String&gt;();');
                 stackDisplay.classList.add('display-none');
                 queueDisplay.classList.remove('display-none');
