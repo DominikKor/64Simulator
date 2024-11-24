@@ -157,40 +157,40 @@ function setReadOnlyCodeLine(code) {
         el.innerHTML = code;
     });
 }
+function resetLineEditor() {
+    var _a, _b;
+    var lineInput = document.getElementById('line-input');
+    var lastLine = document.getElementById('last-line');
+    var ranCode = document.getElementById('ran-code');
+    if ((_b = (_a = lastLine.textContent) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : "" !== '') {
+        lineInput.value = ranCode.innerHTML.replace(/\<br\>/g, '\n').trim() + '\n' + lastLine.textContent + '\n' + lineInput.value;
+        ranCode.textContent = '';
+        lastLine.textContent = '';
+        lineInput.value = lineInput.value.trim();
+    }
+}
 document.addEventListener('DOMContentLoaded', function () {
     var modeTitle = document.getElementById('mode-title');
     var switcher = document.querySelector('.mode-switcher');
     var stackDisplay = document.getElementById('stack-display');
     var queueDisplay = document.getElementById('queue-display');
-    var readOnlyCodeLine = document.getElementById('read-only-code-line');
-    var stack = new Stack();
-    var queue = new Queue();
     clear();
     // event listener for "Run Code" button
     document.getElementById('reset-run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var lineInput, lastLine, ranCode, code;
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var code;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
                     if (!editorLineMode) return [3 /*break*/, 1];
-                    lineInput = document.getElementById('line-input');
-                    lastLine = document.getElementById('last-line');
-                    ranCode = document.getElementById('ran-code');
-                    if ((_b = (_a = lastLine.textContent) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : "" !== '') {
-                        lineInput.value = ranCode.innerHTML.replace(/\<br\>/g, '\n').trim() + '\n' + lastLine.textContent + '\n' + lineInput.value;
-                        ranCode.textContent = '';
-                        lastLine.textContent = '';
-                        lineInput.value = lineInput.value.trim();
-                        runNextLine(true);
-                    }
+                    resetLineEditor();
+                    runNextLine(true);
                     return [3 /*break*/, 3];
                 case 1:
                     code = document.getElementById('code-input').value;
                     return [4 /*yield*/, parseCode(code, true)];
                 case 2:
-                    _c.sent();
-                    _c.label = 3;
+                    _a.sent();
+                    _a.label = 3;
                 case 3: return [2 /*return*/];
             }
         });
@@ -226,10 +226,16 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("clear-stack").addEventListener('click', function () {
         stack.items = [];
         stack.render();
+        if (editorLineMode) {
+            resetLineEditor();
+        }
     });
     document.getElementById("clear-queue").addEventListener('click', function () {
         queue.items = [];
         queue.render();
+        if (editorLineMode) {
+            resetLineEditor();
+        }
     });
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(function (button) {

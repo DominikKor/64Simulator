@@ -109,33 +109,32 @@ function setReadOnlyCodeLine(code: string) {
     });
 }
 
+function resetLineEditor() {
+    const lineInput = document.getElementById('line-input') as HTMLTextAreaElement;
+    const lastLine = document.getElementById('last-line') as HTMLSpanElement;
+    const ranCode = document.getElementById('ran-code') as HTMLSpanElement;
+
+    if (lastLine.textContent?.trim() ?? "" !== '') {
+        lineInput.value = ranCode.innerHTML!.replace(/\<br\>/g, '\n').trim() + '\n' + lastLine.textContent + '\n' + lineInput.value;
+        ranCode.textContent = '';
+        lastLine.textContent = '';
+        lineInput.value = lineInput.value.trim();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const modeTitle = document.getElementById('mode-title')! as HTMLHeadingElement;
     const switcher = document.querySelector('.mode-switcher')! as HTMLDivElement;
     const stackDisplay = document.getElementById('stack-display')! as HTMLDivElement;
     const queueDisplay = document.getElementById('queue-display')! as HTMLDivElement;
-    const readOnlyCodeLine = document.getElementById('read-only-code-line')! as HTMLDivElement;
-
-    const stack = new Stack();
-    const queue = new Queue();
 
     clear();
 
     // event listener for "Run Code" button
     document.getElementById('reset-run-code')!.addEventListener('click', async () => {
         if (editorLineMode) {
-            // Move all lines from #ran-code and #last-line to #line-input in order
-            const lineInput = document.getElementById('line-input') as HTMLTextAreaElement;
-            const lastLine = document.getElementById('last-line') as HTMLSpanElement;
-            const ranCode = document.getElementById('ran-code') as HTMLSpanElement;
-
-            if (lastLine.textContent?.trim() ?? "" !== '') {
-                lineInput.value = ranCode.innerHTML!.replace(/\<br\>/g, '\n').trim() + '\n' + lastLine.textContent + '\n' + lineInput.value;
-                ranCode.textContent = '';
-                lastLine.textContent = '';
-                lineInput.value = lineInput.value.trim();
-                runNextLine(true);
-            }
+            resetLineEditor();
+            runNextLine(true);
             
         } else {
             const code = (document.getElementById('code-input') as HTMLTextAreaElement).value;
@@ -168,11 +167,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("clear-stack")!.addEventListener('click', () => {
         stack.items = [];
         stack.render();
+        if (editorLineMode) {
+            resetLineEditor();
+        }
     });
 
     document.getElementById("clear-queue")!.addEventListener('click', () => {
         queue.items = [];
         queue.render();
+        if (editorLineMode) {
+            resetLineEditor();
+        }
     });
 
     // event listeners for mode switcher buttons
