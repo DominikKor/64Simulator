@@ -7,7 +7,7 @@ let editorLineMode = false;
 const stack = new Stack();
 const queue = new Queue();
 
-const titles: string[] = [ // 0: mode 1: editor mode 2: button
+const runButtontitles: string[] = [ // 0: mode 1: editor mode 2: button
     "Setze den Stapel zurück und führe den Code aus",
     "Setze die Sschlange zurück und führe den Code aus",
     "Setze den Stapel zurück und beginne mit der ersten Zeile",
@@ -92,7 +92,7 @@ function updateEditorMode(lineMode: boolean) {
         allEditor.classList.remove('visually-hidden');
         lineEditor.classList.add('visually-hidden');
     }
-    setRunButtonTitles();
+    setTitles();
 }
 
 function runNextLine(reset: boolean = false) {
@@ -134,13 +134,20 @@ function resetLineEditor() {
     }
 }
 
-function setRunButtonTitles() {
+function setTitles() {
     const resetRunCode = document.getElementById('reset-run-code')! as HTMLButtonElement;
     const runCode = document.getElementById('run-code')! as HTMLButtonElement;
+    const clearAll = document.getElementById('clear-all')! as HTMLButtonElement;
+    const clearStack = document.getElementById('clear-stack')! as HTMLButtonElement;
+    const clearQueue = document.getElementById('clear-queue')! as HTMLButtonElement;
 
     const id = (!isStackMode ? 1 : 0) + (editorLineMode ? 2 : 0)
-    resetRunCode.title = titles[id];
-    runCode.title = titles[id + 4]
+    resetRunCode.title = runButtontitles[id];
+    runCode.title = runButtontitles[id + 4]
+
+    clearAll.title = isStackMode ? "Setze den Stapel und den Code zurück" : "Setze die Schlange und den Code zurück";
+    clearStack.title = "Setze den Stapel zurück";
+    clearQueue.title = "Setze die Schlange zurück";
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -234,9 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 queueDisplay.classList.remove('display-none');
                 queue.render();
             }
-            setRunButtonTitles();
+            setTitles();
         });
     });
 
-    setRunButtonTitles();
+    setTitles();
 });

@@ -40,7 +40,7 @@ var isStackMode = true;
 var editorLineMode = false;
 var stack = new Stack();
 var queue = new Queue();
-var titles = [
+var runButtontitles = [
     "Setze den Stapel zurück und führe den Code aus",
     "Setze die Sschlange zurück und führe den Code aus",
     "Setze den Stapel zurück und beginne mit der ersten Zeile",
@@ -142,7 +142,7 @@ function updateEditorMode(lineMode) {
         allEditor.classList.remove('visually-hidden');
         lineEditor.classList.add('visually-hidden');
     }
-    setRunButtonTitles();
+    setTitles();
 }
 function runNextLine(reset) {
     if (reset === void 0) { reset = false; }
@@ -180,12 +180,18 @@ function resetLineEditor() {
         lineInput.value = lineInput.value.trim();
     }
 }
-function setRunButtonTitles() {
+function setTitles() {
     var resetRunCode = document.getElementById('reset-run-code');
     var runCode = document.getElementById('run-code');
+    var clearAll = document.getElementById('clear-all');
+    var clearStack = document.getElementById('clear-stack');
+    var clearQueue = document.getElementById('clear-queue');
     var id = (!isStackMode ? 1 : 0) + (editorLineMode ? 2 : 0);
-    resetRunCode.title = titles[id];
-    runCode.title = titles[id + 4];
+    resetRunCode.title = runButtontitles[id];
+    runCode.title = runButtontitles[id + 4];
+    clearAll.title = isStackMode ? "Setze den Stapel und den Code zurück" : "Setze die Schlange und den Code zurück";
+    clearStack.title = "Setze den Stapel zurück";
+    clearQueue.title = "Setze die Schlange zurück";
 }
 document.addEventListener('DOMContentLoaded', function () {
     var modeTitle = document.getElementById('mode-title');
@@ -285,8 +291,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 queueDisplay.classList.remove('display-none');
                 queue.render();
             }
-            setRunButtonTitles();
+            setTitles();
         });
     });
-    setRunButtonTitles();
+    setTitles();
 });
