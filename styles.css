@@ -286,3 +286,7 @@ footer {
     height: auto;
     min-height: 38px;
 }
+
+#logo {
+    height: 2.5em;
+}
