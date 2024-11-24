@@ -37,8 +37,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import Stack from './stack.js';
 import Queue from './queue.js';
 var isStackMode = true;
+var editorLineMode = false;
 var stack = new Stack();
 var queue = new Queue();
+var runButtontitles = [
+    "Setze den Stapel zurück und führe den Code aus",
+    "Setze die Sschlange zurück und führe den Code aus",
+    "Setze den Stapel zurück und beginne mit der ersten Zeile",
+    "Setze die Schlange zurück und beginne mit der ersten Zeile",
+    "Führe den Code mit dem existierenden Inhalt des Stapels aus",
+    "Führe den Code mit dem existierenden Inhalt der Schlange aus",
+    "Führe die nächste Zeile mit dem Stapel aus",
+    "Führe die nächste Zeile mit der Schlange aus"
+];
 function parseCode(code, doReset) {
     return __awaiter(this, void 0, void 0, function () {
         var lines, _i, lines_1, line, color, stackIsFull, color;
@@ -105,39 +116,132 @@ function parseCode(code, doReset) {
         });
     });
 }
+function clear() {
+    document.getElementById('code-input').value = '';
+    if (isStackMode) {
+        stack.items = [];
+        stack.render();
+    }
+    else {
+        queue.items = [];
+        queue.render();
+    }
+    document.getElementById('line-input').value = '';
+    document.getElementById('last-line').textContent = '';
+    document.getElementById('ran-code').textContent = '';
+}
+function updateEditorMode(lineMode) {
+    editorLineMode = lineMode;
+    var allEditor = document.getElementById("all-editor");
+    var lineEditor = document.getElementById("line-editor");
+    if (lineMode) {
+        allEditor.classList.add('visually-hidden');
+        lineEditor.classList.remove('visually-hidden');
+    }
+    else {
+        allEditor.classList.remove('visually-hidden');
+        lineEditor.classList.add('visually-hidden');
+    }
+    setTitles();
+}
+function runNextLine(reset) {
+    if (reset === void 0) { reset = false; }
+    if (editorLineMode) {
+        var lineInput = document.getElementById('line-input');
+        var lastLine = document.getElementById('last-line');
+        var ranCode = document.getElementById('ran-code');
+        var lines = lineInput.value.split('\n');
+        if (lines.length > 0 && lines[0].trim() !== '') {
+            var line = lines[0];
+            parseCode(line, reset);
+            lineInput.value = lines.slice(1).join('\n');
+            ranCode.innerHTML += lastLine.textContent;
+            if (ranCode.innerHTML.length > 0 && lastLine.textContent.length > 0) {
+                ranCode.innerHTML += '<br>';
+            }
+            lastLine.textContent = line;
+        }
+    }
+}
+function setReadOnlyCodeLine(code) {
+    document.querySelectorAll('.read-only-code-line').forEach(function (el) {
+        el.innerHTML = code;
+    });
+}
+function resetLineEditor() {
+    var _a, _b;
+    var lineInput = document.getElementById('line-input');
+    var lastLine = document.getElementById('last-line');
+    var ranCode = document.getElementById('ran-code');
+    if ((_b = (_a = lastLine.textContent) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : "" !== '') {
+        lineInput.value = ranCode.innerHTML.replace(/\<br\>/g, '\n').trim() + '\n' + lastLine.textContent + '\n' + lineInput.value;
+        ranCode.textContent = '';
+        lastLine.textContent = '';
+        lineInput.value = lineInput.value.trim();
+    }
+}
+function setTitles() {
+    var resetRunCode = document.getElementById('reset-run-code');
+    var runCode = document.getElementById('run-code');
+    var clearAll = document.getElementById('clear-all');
+    var clearStack = document.getElementById('clear-stack');
+    var clearQueue = document.getElementById('clear-queue');
+    var id = (!isStackMode ? 1 : 0) + (editorLineMode ? 2 : 0);
+    resetRunCode.title = runButtontitles[id];
+    runCode.title = runButtontitles[id + 4];
+    clearAll.title = isStackMode ? "Setze den Stapel und den Code zurück" : "Setze die Schlange und den Code zurück";
+    clearStack.title = "Setze den Stapel zurück";
+    clearQueue.title = "Setze die Schlange zurück";
+}
 document.addEventListener('DOMContentLoaded', function () {
     var modeTitle = document.getElementById('mode-title');
     var switcher = document.querySelector('.mode-switcher');
     var stackDisplay = document.getElementById('stack-display');
     var queueDisplay = document.getElementById('queue-display');
-    var readOnlyCodeLine = document.getElementById('read-only-code-line');
+    var resetRunCode = document.getElementById('reset-run-code');
+    var runCode = document.getElementById('run-code');
+    clear();
     // event listener for "Run Code" button
-    document.getElementById('reset-run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
+    resetRunCode.addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
         var code;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    if (!editorLineMode) return [3 /*break*/, 1];
+                    resetLineEditor();
+                    runNextLine(true);
+                    return [3 /*break*/, 3];
+                case 1:
                     code = document.getElementById('code-input').value;
                     return [4 /*yield*/, parseCode(code, true)];
-                case 1:
+                case 2:
                     _a.sent();
-                    return [2 /*return*/];
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     }); });
-    document.getElementById('run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
+    runCode.addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
         var code;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    if (!editorLineMode) return [3 /*break*/, 1];
+                    runNextLine();
+                    return [3 /*break*/, 3];
+                case 1:
                     code = document.getElementById('code-input').value;
                     return [4 /*yield*/, parseCode(code, false)];
-                case 1:
+                case 2:
                     _a.sent();
-                    return [2 /*return*/];
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     }); });
+    document.getElementById('editor-mode-all').addEventListener('click', function () { return updateEditorMode(false); });
+    document.getElementById('editor-mode-line').addEventListener('click', function () { return updateEditorMode(true); });
+    updateEditorMode(document.getElementById('editor-mode-line').checked);
     document.getElementById("clear-all").addEventListener('click', function () {
         document.getElementById('code-input').value = '';
         stack.items = [];
@@ -148,10 +252,16 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("clear-stack").addEventListener('click', function () {
         stack.items = [];
         stack.render();
+        if (editorLineMode) {
+            resetLineEditor();
+        }
     });
     document.getElementById("clear-queue").addEventListener('click', function () {
         queue.items = [];
         queue.render();
+        if (editorLineMode) {
+            resetLineEditor();
+        }
     });
     // event listeners for mode switcher buttons
     document.querySelectorAll('.btn-mode').forEach(function (button) {
@@ -165,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 isStackMode = true;
                 modeTitle.textContent = 'STACK24 – Hier stack ich alles.';
                 modeTitle.classList.add('stack');
-                readOnlyCodeLine.innerHTML = 'Stack&lt;String&gt; s = new Stack&lt;String&gt;();';
+                setReadOnlyCodeLine('Stack&lt;String&gt; s = new Stack&lt;String&gt;();');
                 queueDisplay.classList.add('display-none');
                 stackDisplay.classList.remove('display-none');
                 stack.render();
@@ -176,11 +286,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 isStackMode = false;
                 modeTitle.textContent = 'Queue24';
                 modeTitle.classList.remove('stack');
-                readOnlyCodeLine.innerHTML = 'Queue&lt;String&gt; q = new Queue&lt;String&gt;();';
+                setReadOnlyCodeLine('Queue&lt;String&gt; q = new Queue&lt;String&gt;();');
                 stackDisplay.classList.add('display-none');
                 queueDisplay.classList.remove('display-none');
                 queue.render();
             }
+            setTitles();
         });
     });
+    setTitles();
 });
