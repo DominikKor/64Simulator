@@ -30,13 +30,16 @@
                 <button class="btn clear-btn"><ion-icon name="trash-outline"></ion-icon></button>
             </div>
             <div class="form-floating" id="all-editor">
-                <div id="read-only-code-line" class="form-control read-only-line">
+                <div class="form-control read-only-line read-only-code-line">
                     Stack&lt;String&gt; s = new Stack&lt;String&gt;();
                 </div>
                 <textarea id="code-input" class="form-control code-textarea"></textarea>
                 <label for="code-input">Schreibe hier deinen Java-Code...</label>
             </div>
             <div id="line-editor" class="form-floating visually-hidden">
+                <div class="form-control read-only-line read-only-code-line">
+                    Stack&lt;String&gt; s = new Stack&lt;String&gt;();
+                </div>
                 <span id="ran-code" class="form-control">
 
                 </span>

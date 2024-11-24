@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import Stack from './stack.js';
 import Queue from './queue.js';
 var isStackMode = true;
+var editorLineMode = false;
 var stack = new Stack();
 var queue = new Queue();
 function parseCode(code, doReset) {
@@ -115,8 +116,12 @@ function clear() {
         queue.items = [];
         queue.render();
     }
+    document.getElementById('line-input').value = '';
+    document.getElementById('last-line').textContent = '';
+    document.getElementById('ran-code').textContent = '';
 }
 function updateEditorMode(lineMode) {
+    editorLineMode = lineMode;
     var allEditor = document.getElementById("all-editor");
     var lineEditor = document.getElementById("line-editor");
     if (lineMode) {
@@ -128,6 +133,30 @@ function updateEditorMode(lineMode) {
         lineEditor.classList.add('visually-hidden');
     }
 }
+function runNextLine(reset) {
+    if (reset === void 0) { reset = false; }
+    if (editorLineMode) {
+        var lineInput = document.getElementById('line-input');
+        var lastLine = document.getElementById('last-line');
+        var ranCode = document.getElementById('ran-code');
+        var lines = lineInput.value.split('\n');
+        if (lines.length > 0 && lines[0].trim() !== '') {
+            var line = lines[0];
+            parseCode(line, reset);
+            lineInput.value = lines.slice(1).join('\n');
+            ranCode.innerHTML += lastLine.textContent;
+            if (ranCode.innerHTML.length > 0 && lastLine.textContent.length > 0) {
+                ranCode.innerHTML += '<br>';
+            }
+            lastLine.textContent = line;
+        }
+    }
+}
+function setReadOnlyCodeLine(code) {
+    document.querySelectorAll('.read-only-code-line').forEach(function (el) {
+        el.innerHTML = code;
+    });
+}
 document.addEventListener('DOMContentLoaded', function () {
     var modeTitle = document.getElementById('mode-title');
     var switcher = document.querySelector('.mode-switcher');
@@ -136,17 +165,33 @@ document.addEventListener('DOMContentLoaded', function () {
     var readOnlyCodeLine = document.getElementById('read-only-code-line');
     var stack = new Stack();
     var queue = new Queue();
+    clear();
     // event listener for "Run Code" button
     document.getElementById('reset-run-code').addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var code;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var lineInput, lastLine, ranCode, code;
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
+                    if (!editorLineMode) return [3 /*break*/, 1];
+                    lineInput = document.getElementById('line-input');
+                    lastLine = document.getElementById('last-line');
+                    ranCode = document.getElementById('ran-code');
+                    if ((_b = (_a = lastLine.textContent) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : "" !== '') {
+                        lineInput.value = ranCode.innerHTML.replace(/\<br\>/g, '\n').trim() + '\n' + lastLine.textContent + '\n' + lineInput.value;
+                        ranCode.textContent = '';
+                        lastLine.textContent = '';
+                        lineInput.value = lineInput.value.trim();
+                        runNextLine(true);
+                    }
+                    return [3 /*break*/, 3];
+                case 1:
                     code = document.getElementById('code-input').value;
                     return [4 /*yield*/, parseCode(code, true)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
+                case 2:
+                    _c.sent();
+                    _c.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     }); });
@@ -155,11 +200,16 @@ document.addEventListener('DOMContentLoaded', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    if (!editorLineMode) return [3 /*break*/, 1];
+                    runNextLine();
+                    return [3 /*break*/, 3];
+                case 1:
                     code = document.getElementById('code-input').value;
                     return [4 /*yield*/, parseCode(code, false)];
-                case 1:
+                case 2:
                     _a.sent();
-                    return [2 /*return*/];
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     }); });
@@ -179,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 isStackMode = true;
                 modeTitle.textContent = 'STACK24 – Hier stack ich alles.';
                 modeTitle.classList.add('stack');
-                readOnlyCodeLine.innerHTML = 'Stack&lt;String&gt; s = new Stack&lt;String&gt;();';
+                setReadOnlyCodeLine('Stack&lt;String&gt; s = new Stack&lt;String&gt;();');
                 queueDisplay.classList.add('display-none');
                 stackDisplay.classList.remove('display-none');
                 stack.render();
@@ -190,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 isStackMode = false;
                 modeTitle.textContent = 'Queue24';
                 modeTitle.classList.remove('stack');
-                readOnlyCodeLine.innerHTML = 'Queue&lt;String&gt; q = new Queue&lt;String&gt;();';
+                setReadOnlyCodeLine('Queue&lt;String&gt; q = new Queue&lt;String&gt;();');
                 stackDisplay.classList.add('display-none');
                 queueDisplay.classList.remove('display-none');
                 queue.render();

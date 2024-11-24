@@ -2,6 +2,8 @@ import Stack from './stack.js';
 import Queue from './queue.js';
 
 let isStackMode = true;
+let editorLineMode = false;
+
 const stack = new Stack();
 const queue = new Queue();
 
@@ -62,9 +64,14 @@ function clear() {
         queue.items = [];
         queue.render();
     }
+
+    (document.getElementById('line-input') as HTMLTextAreaElement).value = '';
+    (document.getElementById('last-line') as HTMLSpanElement).textContent = '';
+    (document.getElementById('ran-code') as HTMLSpanElement).textContent = '';
 }
 
 function updateEditorMode(lineMode: boolean) {
+    editorLineMode = lineMode;
     const allEditor = document.getElementById("all-editor")! as HTMLDivElement;
     const lineEditor = document.getElementById("line-editor")! as HTMLDivElement;
     if (lineMode) {
@@ -74,6 +81,32 @@ function updateEditorMode(lineMode: boolean) {
         allEditor.classList.remove('visually-hidden');
         lineEditor.classList.add('visually-hidden');
     }
+}
+
+function runNextLine(reset: boolean = false) {
+    if (editorLineMode) {
+        const lineInput = document.getElementById('line-input') as HTMLTextAreaElement;
+        const lastLine = document.getElementById('last-line') as HTMLSpanElement;
+        const ranCode = document.getElementById('ran-code') as HTMLSpanElement;
+
+        const lines = lineInput.value.split('\n');
+        if (lines.length > 0 && lines[0].trim() !== '') {
+            const line = lines[0];
+            parseCode(line, reset);
+            lineInput.value = lines.slice(1).join('\n');
+            ranCode.innerHTML += lastLine.textContent;
+            if (ranCode.innerHTML!.length > 0 && lastLine.textContent!.length > 0) {
+                ranCode.innerHTML += '<br>';
+            }
+            lastLine.textContent = line;
+        }
+    }
+}
+
+function setReadOnlyCodeLine(code: string) {
+    (document.querySelectorAll('.read-only-code-line') as NodeListOf<HTMLDivElement>).forEach(el => {
+        el.innerHTML = code;
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -86,15 +119,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const stack = new Stack();
     const queue = new Queue();
 
+    clear();
+
     // event listener for "Run Code" button
     document.getElementById('reset-run-code')!.addEventListener('click', async () => {
-        const code = (document.getElementById('code-input') as HTMLTextAreaElement).value;
-        await parseCode(code, true);
+        if (editorLineMode) {
+            // Move all lines from #ran-code and #last-line to #line-input in order
+            const lineInput = document.getElementById('line-input') as HTMLTextAreaElement;
+            const lastLine = document.getElementById('last-line') as HTMLSpanElement;
+            const ranCode = document.getElementById('ran-code') as HTMLSpanElement;
+
+            if (lastLine.textContent?.trim() ?? "" !== '') {
+                lineInput.value = ranCode.innerHTML!.replace(/\<br\>/g, '\n').trim() + '\n' + lastLine.textContent + '\n' + lineInput.value;
+                ranCode.textContent = '';
+                lastLine.textContent = '';
+                lineInput.value = lineInput.value.trim();
+                runNextLine(true);
+            }
+            
+        } else {
+            const code = (document.getElementById('code-input') as HTMLTextAreaElement).value;
+            await parseCode(code, true);
+        }
     });
 
     document.getElementById('run-code')!.addEventListener('click', async () => {
-        const code = (document.getElementById('code-input') as HTMLTextAreaElement).value;
-        await parseCode(code, false);
+        if (editorLineMode) {
+            runNextLine();
+        } else {
+            const code = (document.getElementById('code-input') as HTMLTextAreaElement).value;
+            await parseCode(code, false);
+        }
     });
 
     document.getElementById('editor-mode-all')!.addEventListener('click', () => updateEditorMode(false));
@@ -118,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 modeTitle.textContent = 'STACK24 – Hier stack ich alles.';
                 modeTitle.classList.add('stack')
-                readOnlyCodeLine.innerHTML = 'Stack&lt;String&gt; s = new Stack&lt;String&gt;();';
+                setReadOnlyCodeLine('Stack&lt;String&gt; s = new Stack&lt;String&gt;();');
                 queueDisplay.classList.add('display-none');
                 stackDisplay.classList.remove('display-none');
                 stack.render();
@@ -129,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 modeTitle.textContent = 'Queue24';
                 modeTitle.classList.remove('stack')
-                readOnlyCodeLine.innerHTML = 'Queue&lt;String&gt; q = new Queue&lt;String&gt;();';
+                setReadOnlyCodeLine('Queue&lt;String&gt; q = new Queue&lt;String&gt;();');
                 stackDisplay.classList.add('display-none');
                 queueDisplay.classList.remove('display-none');
                 queue.render();
